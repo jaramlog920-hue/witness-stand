@@ -79,8 +79,8 @@ export const VERDICT_LABEL: Record<Verdict, string> = {
 
 export const VERDICT_DESC: Record<Verdict, string> = {
   fact: '본문이 그대로 확인한다',
-  twisted: '근거는 있으나 뜻이 비틀렸다',
-  false: '본문이 분명히 부정한다',
+  twisted: '본문에 있는 말·일을 옮기면서 뜻이 비틀렸다',
+  false: '본문이 말하는 것과 정반대다',
   absent: '본문이 말하지 않는 내용이다',
 }
 

@@ -23,8 +23,13 @@ export interface Tries {
   evidence: number
 }
 
+/** 정답으로 인정하는 판정 — 중복 답변 사건은 두 가지 (docs/content-audit.md) */
+export function acceptedVerdicts(c: RumorCase): Verdict[] {
+  return [c.verdict, ...(c.alsoAccept ?? [])]
+}
+
 export function grade(c: RumorCase, attempt: Attempt, prevWrongVerdicts: number): Outcome {
-  if (attempt.verdict !== c.verdict) return { kind: 'wrong-verdict', hintLevel: prevWrongVerdicts + 1 }
+  if (!acceptedVerdicts(c).includes(attempt.verdict)) return { kind: 'wrong-verdict', hintLevel: prevWrongVerdicts + 1 }
   if (c.verdict === 'absent') return { kind: 'solved' }
   const keys = evidenceKeys(c)
   return attempt.marked.some((k) => keys.has(k)) ? { kind: 'solved' } : { kind: 'wrong-evidence' }

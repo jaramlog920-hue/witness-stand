@@ -85,6 +85,16 @@ for (const c of rumors) {
   if (!chapterIds.has(c.chapter)) fail(w, `없는 사건철 ${c.chapter}`)
   if (![1, 2, 3].includes(c.difficulty)) fail(w, `difficulty ${c.difficulty}`)
   if (!VERDICTS.has(c.verdict)) fail(w, `verdict ${c.verdict}`)
+  // 중복 답변(alsoAccept): 같은 근거 절로 채점하므로 absent 와 섞을 수 없다
+  if (c.alsoAccept !== undefined) {
+    if (!Array.isArray(c.alsoAccept) || c.alsoAccept.length === 0) fail(w, 'alsoAccept는 비어 있지 않은 배열')
+    else
+      for (const v of c.alsoAccept) {
+        if (!VERDICTS.has(v)) fail(w, `alsoAccept ${v}`)
+        if (v === c.verdict) fail(w, `alsoAccept가 verdict와 같음 (${v})`)
+        if (v === 'absent' || c.verdict === 'absent') fail(w, 'absent 판정은 중복 답변으로 묶을 수 없음')
+      }
+  }
   if (!c.rumor?.trim()) fail(w, 'rumor 비어 있음')
   if (!c.source?.trim()) fail(w, 'source 비어 있음')
   if (!Array.isArray(c.scope) || c.scope.length < 1 || c.scope.length > 4) fail(w, 'scope는 1~4구간')

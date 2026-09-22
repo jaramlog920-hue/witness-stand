@@ -1,5 +1,6 @@
 import { Link, Navigate, useNavigate, useParams } from 'react-router'
 import { getRumor, passageFor, VERDICT_LABEL } from '../../content/cases'
+import { acceptedVerdicts } from './logic'
 import { useProgress, isGold } from '../../store/progress'
 
 export function Result() {
@@ -43,6 +44,11 @@ export function Result() {
       </section>
 
       <p className="explain">{c.explanation}</p>
+      {c.alsoAccept?.length ? (
+        <p className="muted small">
+          중복 답변: 이 사건은 {acceptedVerdicts(c).map((v) => VERDICT_LABEL[v]).join('·')} 어느 쪽으로 판정해도 인정합니다.
+        </p>
+      ) : null}
       {c.recordedInText && <p className="muted small">이 소문은 성경 본문이 직접 기록한 소문입니다.</p>}
 
       <div className="result-actions">

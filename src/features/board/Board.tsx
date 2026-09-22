@@ -24,7 +24,7 @@ const RANKS: [number, string][] = [
   [8, '서기'],
   [25, '조사관'],
   [55, '선임 조사관'],
-  [90, '데오빌로의 기록관'],
+  [85, '데오빌로의 기록관'],
 ]
 export function rankFor(total: number): string {
   let r = RANKS[0][1]
@@ -39,8 +39,11 @@ export function Board() {
   const solved = useProgress((s) => s.solved)
   const witnessSolved = useProgress((s) => s.witnessSolved)
   const [tab, setTab] = useState<Tab>('I')
-  const total = Object.keys(solved).length + Object.keys(witnessSolved).length
-  const allDone = Object.keys(solved).length >= rumors.length && Object.keys(witnessSolved).length >= testimonies.length
+  // 삭제된 사건의 기록이 저장소에 남아 있어도 세지 않는다 — 지금 있는 사건만 센다
+  const solvedNow = rumors.filter((c) => solved[c.id]).length
+  const witnessNow = testimonies.filter((c) => witnessSolved[c.id]).length
+  const total = solvedNow + witnessNow
+  const allDone = solvedNow >= rumors.length && witnessNow >= testimonies.length
 
   return (
     <main className="shell">

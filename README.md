@@ -15,7 +15,8 @@ npm run build
 ## 문서
 
 - `docs/exclusion-list.md` — 콘텐츠 제외 기준 (최상위)
-- `docs/case-candidates.md` — 사건 후보 (소문 81, 증언 18)
+- `docs/case-candidates.md` — 사건 후보 (소문 81 작성 → 검수 후 72, 증언 18)
+- `docs/content-audit.md` — 전수 검수 기록 (삭제·수정 사유)
 - `docs/spec.md` — 게임 루프·데이터 구조·화면·마일스톤
 
 ## 구조
@@ -29,7 +30,7 @@ npm run build
 
 ## 현재 상태 (2026-09-22)
 
-소문 사건 81건 + 증언 사건 18건. 위임장 → 게시판 → 사건 파일 → 조사 → 판정 → 결과 → 보관소 → 보고서까지 전 화면 동작. 테스트 39개, verify 인용 282개 통과.
+소문 사건 80건 + 증언 사건 18건. 위임장 → 게시판 → 사건 파일 → 조사 → 판정 → 결과 → 보관소 → 보고서까지 전 화면 동작. 테스트 40개, verify 인용 271개 통과.
 
 배포: https://witness-stand-two.vercel.app (Vercel 프로젝트 `witness-stand`, light-herald와 같은 계정). 재배포는 `npx vercel deploy --prod`. 아이콘(`public/icon-*.png`)은 PIL로 만든 임시본 — 교체 가능.
 

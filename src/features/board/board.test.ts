@@ -27,7 +27,7 @@ describe('해금', () => {
     expect(rumorsIn('II').length).toBeGreaterThanOrEqual(10)
     expect(rumorsIn('III').length).toBeGreaterThanOrEqual(8)
     expect(testimonies.length).toBeGreaterThan(0)
-    expect(rumors.length + testimonies.length).toBeGreaterThanOrEqual(90) // 최고 등급 도달 가능
+    expect(rumors.length + testimonies.length).toBeGreaterThanOrEqual(85) // 최고 등급 도달 가능
   })
 })
 
@@ -37,6 +37,6 @@ describe('rankFor', () => {
     expect(rankFor(8)).toBe('서기')
     expect(rankFor(25)).toBe('조사관')
     expect(rankFor(55)).toBe('선임 조사관')
-    expect(rankFor(90)).toBe('데오빌로의 기록관')
+    expect(rankFor(85)).toBe('데오빌로의 기록관')
   })
 })

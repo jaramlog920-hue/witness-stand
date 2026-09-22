@@ -8,7 +8,10 @@ export function Complete() {
   const name = useProgress((s) => s.investigator.name)
   const solved = useProgress((s) => s.solved)
   const witnessSolved = useProgress((s) => s.witnessSolved)
-  const done = Object.keys(solved).length >= rumors.length && Object.keys(witnessSolved).length >= testimonies.length
+  // 삭제된 사건의 기록이 저장소에 남아 있어도 세지 않는다
+  const solvedNow = rumors.filter((c) => solved[c.id]).length
+  const witnessNow = testimonies.filter((c) => witnessSolved[c.id]).length
+  const done = solvedNow >= rumors.length && witnessNow >= testimonies.length
   const gold =
     rumors.filter((c) => solved[c.id] && isGold(solved[c.id])).length +
     testimonies.filter((c) => witnessSolved[c.id] && isGold(witnessSolved[c.id])).length
@@ -25,7 +28,7 @@ export function Complete() {
         <div className="topbar"><button className="back" onClick={() => nav('/board')}>← 게시판</button></div>
         <p className="lock-msg">
           모든 사건을 해결하면 각하께 보고서를 보낼 수 있습니다.
-          <br /><span className="small">소문 {Object.keys(solved).length}/{rumors.length} · 증언 {Object.keys(witnessSolved).length}/{testimonies.length}</span>
+          <br /><span className="small">소문 {solvedNow}/{rumors.length} · 증언 {witnessNow}/{testimonies.length}</span>
         </p>
       </main>
     )

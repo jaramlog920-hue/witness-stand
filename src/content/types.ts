@@ -40,6 +40,8 @@ export interface RumorCase {
   /** 조사 범위 1~4구간 */
   scope: Ref[]
   verdict: Verdict
+  /** 판정이 두 가지로 읽히는 사건에서 함께 정답으로 인정할 판정 (중복 답변) */
+  alsoAccept?: Verdict[]
   /** 정답 절 집합. absent면 비어 있음 */
   evidence: Ref[]
   /** 틀렸을 때 남길 구간 순서. scope의 부분집합 */

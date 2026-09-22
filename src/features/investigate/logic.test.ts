@@ -26,6 +26,12 @@ describe('grade', () => {
     expect(grade(base, { verdict: 'fact', marked: ['mat:28:6'] }, 0)).toEqual({ kind: 'wrong-verdict', hintLevel: 1 })
     expect(grade(base, { verdict: 'fact', marked: ['mat:28:6'] }, 1)).toEqual({ kind: 'wrong-verdict', hintLevel: 2 })
   })
+  it('alsoAccept에 있는 판정도 정답으로 인정', () => {
+    const dual: RumorCase = { ...base, verdict: 'twisted', alsoAccept: ['false'] }
+    expect(grade(dual, { verdict: 'twisted', marked: ['mat:28:6'] }, 0)).toEqual({ kind: 'solved' })
+    expect(grade(dual, { verdict: 'false', marked: ['mat:28:6'] }, 0)).toEqual({ kind: 'solved' })
+    expect(grade(dual, { verdict: 'fact', marked: ['mat:28:6'] }, 0)).toEqual({ kind: 'wrong-verdict', hintLevel: 1 })
+  })
   it('absent 판정은 증거 없이도 해결', () => {
     const absent: RumorCase = { ...base, verdict: 'absent', evidence: [] }
     expect(grade(absent, { verdict: 'absent', marked: [] }, 0)).toEqual({ kind: 'solved' })
