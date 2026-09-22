@@ -38,3 +38,5 @@ npm run build
 ## 콘텐츠 작성
 
 `rumors.json`·`testimonies.json`에 항목을 추가하고 `npm run verify`. 증언 카드 `quote`는 절 본문과 **완전 일치**해야 하고, 그 외 텍스트의 따옴표 안 문구(8자 이상)는 참조 절에 **포함**되어야 한다. `flags: ["review"]`가 남은 사건은 빌드는 통과하지만 게시판에 표시되지 않는다.
+
+자동 배포: `main`에 push하면 Vercel이 빌드·배포한다 (prebuild에서 verify 실행).
