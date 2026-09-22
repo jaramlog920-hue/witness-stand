@@ -1,0 +1,16 @@
+[
+  {
+    "id": "w-bad", "chapter": "I", "title": "t", "summary": "s",
+    "scope": ["요 9:1-41"],
+    "cards": [
+      { "id": "c1", "speaker": "이웃", "speakerId": "n", "ref": "요 9:9", "quote": "혹은 그 사람이라 하며 혹은 아니라 그와 비슷하다 하거늘 제 말은 내가 그로라 하니" },
+      { "id": "c2", "speaker": "이웃", "speakerId": "n", "ref": "요 9:9", "quote": "본문과 다른 문장" },
+      { "id": "c3", "speaker": "부모", "speakerId": "p", "ref": "요 10:1", "quote": "x" },
+      { "id": "c4", "speaker": "부모", "speakerId": "p", "ref": "요 9:20", "quote": "그 부모가 대답하여 가로되 이가 우리 아들인 것과 소경으로 난 것을 아나이다" }
+    ],
+    "questions": [
+      { "id": "q1", "prompt": "?", "answerCards": ["c1", "nope"], "record": "r" }
+    ],
+    "explanation": ""
+  }
+]

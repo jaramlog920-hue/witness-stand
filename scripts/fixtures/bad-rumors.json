@@ -1,0 +1,31 @@
+[
+  {
+    "id": "ok", "chapter": "I", "difficulty": 1,
+    "rumor": "밤에 제자들이 와서 시체를 도적질하여 갔다",
+    "source": "대제사장들과 장로들", "sourceRef": "마 28:12",
+    "scope": ["마 28:1-15"], "verdict": "false",
+    "evidence": ["마 28:6", "마 28:13"], "hintOrder": ["마 28:11-15"],
+    "explanation": "군병들은 \"그의 제자들이 밤에 와서 우리가 잘 때에 그를 도적질하여 갔다\" 하라고 돈을 받았다.",
+    "recordedInText": true
+  },
+  {
+    "id": "ok", "chapter": "IV", "difficulty": 5,
+    "rumor": "x", "source": "y",
+    "scope": ["창 1:1"], "verdict": "maybe",
+    "evidence": [], "hintOrder": [], "explanation": "", "recordedInText": true
+  },
+  {
+    "id": "bad-evidence", "chapter": "I", "difficulty": 1,
+    "rumor": "x", "source": "y",
+    "scope": ["마 28:1-15"], "verdict": "false",
+    "evidence": ["마 27:64"], "hintOrder": ["마 28:99"],
+    "explanation": "그가 \"이 문장은 본문에 없는 인용문이다\" 하였다",
+    "recordedInText": false
+  },
+  {
+    "id": "absent-with-evidence", "chapter": "I", "difficulty": 1,
+    "rumor": "x", "source": "y",
+    "scope": ["마 2:1-12"], "verdict": "absent",
+    "evidence": ["마 2:11"], "hintOrder": [], "explanation": "", "recordedInText": false
+  }
+]

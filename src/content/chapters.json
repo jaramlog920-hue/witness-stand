@@ -1,0 +1,5 @@
+[
+  { "id": "I",   "title": "갈릴리와 예루살렘", "subtitle": "복음서에 기록된 소문",  "unlockAfter": null,                          "witnessUnlock": 10 },
+  { "id": "II",  "title": "사도들의 길",       "subtitle": "사도행전의 고소와 오해", "unlockAfter": { "chapter": "I",  "solved": 8 }, "witnessUnlock": 10 },
+  { "id": "III", "title": "편지의 뒷면",       "subtitle": "서신서가 반박하는 주장", "unlockAfter": { "chapter": "II", "solved": 8 }, "witnessUnlock": 10 }
+]
