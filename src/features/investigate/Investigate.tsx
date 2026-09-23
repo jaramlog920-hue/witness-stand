@@ -1,9 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router'
-import { getRumor, passageFor, VERDICTS, VERDICT_LABEL, VERDICT_DESC, byAbbr } from '../../content/cases'
-import { expandRef, verseKeyString } from '../../content/ref'
+import { getRumor, passageFor, VERDICTS, VERDICT_LABEL, VERDICT_DESC } from '../../content/cases'
 import { useProgress } from '../../store/progress'
-import { grade, visibleScope, toggleMark, MAX_EVIDENCE, type Outcome } from './logic'
+import { grade, visibleScope, toggleMark, highlightKeys, MAX_EVIDENCE, type Outcome } from './logic'
 import type { Verdict } from '../../content/types'
 
 export function Investigate() {
@@ -23,10 +22,7 @@ export function Investigate() {
 
   const view = useMemo(() => (c ? visibleScope(c, wrongVerdicts) : null), [c, wrongVerdicts])
   const passages = useMemo(() => (view ? view.refs.map(passageFor) : []), [view])
-  const highlight = useMemo(
-    () => new Set(view?.highlight ? expandRef(view.highlight, byAbbr).map(verseKeyString) : []),
-    [view],
-  )
+  const highlight = useMemo(() => new Set(view ? highlightKeys(view) : []), [view])
 
   // 끝까지 읽었는지: 스크롤·리사이즈마다 끝 표식이 화면 안에 들어왔는지 본다.
   // IntersectionObserver는 화면에 그려지지 않는 탭에서 콜백이 오지 않아 쓰지 않는다.

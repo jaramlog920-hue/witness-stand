@@ -1,4 +1,4 @@
-import { grade, visibleScope, toggleMark, MAX_EVIDENCE } from './logic'
+import { grade, visibleScope, toggleMark, highlightKeys, MAX_EVIDENCE } from './logic'
 import type { RumorCase } from '../../content/types'
 
 const base: RumorCase = {
@@ -51,6 +51,19 @@ describe('visibleScope', () => {
   it('보이는 구간에 정답이 없으면 정답 구간을 함께 연다', () => {
     const c: RumorCase = { ...base, hintOrder: ['마 27:62-66'] }
     expect(visibleScope(c, 2)).toEqual({ refs: ['마 27:62-66', '마 28:5-6'], highlight: '마 28:5-6' })
+  })
+})
+
+describe('highlightKeys', () => {
+  it('강조는 언제나 정답 절 한 개 — 구간 evidence 라도 전체를 칠하지 않는다', () => {
+    const c: RumorCase = { ...base, evidence: ['마 28:11-15'], hintOrder: ['마 28:11-15'] }
+    const view = visibleScope(c, 2)
+    expect(view.highlight).toBe('마 28:11-15')
+    expect(highlightKeys(view)).toEqual(['mat:28:11'])
+  })
+  it('강조할 절이 없으면 빈 배열', () => {
+    expect(highlightKeys({ highlight: null })).toEqual([])
+    expect(highlightKeys(visibleScope(base, 0))).toEqual([])
   })
 })
 

@@ -70,7 +70,9 @@ export function Archive() {
                 const rec = solved[c.id]
                 return (
                   <Link key={c.id} to={`/case/${c.id}/result`} className={`card-mini ${isGold(rec) ? 'gold' : ''}`} style={{ borderColor: `var(--seal-${c.verdict})` }}>
-                    <span className="v" style={{ color: `var(--seal-${c.verdict})` }}>{VERDICT_LABEL[c.verdict]}</span>
+                    <span className="v" style={{ color: `var(--seal-${c.verdict})` }}>
+                      {[c.verdict, ...(c.alsoAccept ?? [])].map((v) => VERDICT_LABEL[v]).join('·')}
+                    </span>
                     <span className="t">{c.rumor}</span>
                     {rec.replays > 0 && <span className="r">재조사 {rec.replays}</span>}
                   </Link>

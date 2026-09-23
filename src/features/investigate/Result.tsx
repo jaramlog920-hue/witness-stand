@@ -14,6 +14,9 @@ export function Result() {
   const gold = isGold(rec)
   // 근거 구절 전문이 결과의 중심이다 (spec §4-1 6번). absent는 조사 범위 전체가 근거.
   const passages = (c.verdict === 'absent' ? c.scope : c.evidence).map(passageFor)
+  // 중복 답변 사건은 인장에 두 판정을 함께 찍는다 (어느 쪽으로 답해도 정답이므로)
+  const labels = acceptedVerdicts(c).map((v) => VERDICT_LABEL[v])
+  const sealLabel = labels.join('·')
 
   return (
     <main className="shell">
@@ -22,8 +25,8 @@ export function Result() {
         <span className="meta">사건 {c.id.toUpperCase()} · 해결</span>
       </div>
 
-      <div className={`seal ${c.verdict} ${gold ? 'gold' : ''}`} aria-label={`판정 ${VERDICT_LABEL[c.verdict]}`}>
-        <div className="v">{VERDICT_LABEL[c.verdict]}</div>
+      <div className={`seal ${c.verdict} ${gold ? 'gold' : ''}`} aria-label={`판정 ${sealLabel}`}>
+        <div className={`v ${labels.length > 1 ? 'dual' : ''}`}>{sealLabel}</div>
         <div className="who">조사관 {name} 확인</div>
       </div>
       <p className="muted small" style={{ textAlign: 'center', marginTop: 0 }}>
@@ -46,7 +49,7 @@ export function Result() {
       <p className="explain">{c.explanation}</p>
       {c.alsoAccept?.length ? (
         <p className="muted small">
-          중복 답변: 이 사건은 {acceptedVerdicts(c).map((v) => VERDICT_LABEL[v]).join('·')} 어느 쪽으로 판정해도 인정합니다.
+          중복 답변: 이 사건은 {sealLabel} 어느 쪽으로 판정해도 인정합니다.
         </p>
       ) : null}
       {c.recordedInText && <p className="muted small">이 소문은 성경 본문이 직접 기록한 소문입니다.</p>}

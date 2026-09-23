@@ -1,7 +1,7 @@
 // 소문 사건 채점 규칙 (docs/spec.md §4-1 5번). UI 없이 테스트한다.
 import type { RumorCase, Verdict } from '../../content/types'
 import { evidenceKeys, byAbbr } from '../../content/cases'
-import { refWithin } from '../../content/ref'
+import { expandRef, refWithin, verseKeyString } from '../../content/ref'
 
 export const MAX_EVIDENCE = 3
 
@@ -47,6 +47,15 @@ export function visibleScope(c: RumorCase, hintLevel: number): { refs: string[];
   const inside = c.evidence.find((e) => refWithin(e, refs, byAbbr))
   if (inside) return { refs, highlight: inside }
   return { refs: [...refs, c.evidence[0]], highlight: c.evidence[0] }
+}
+
+/**
+ * 2단계 힌트에서 강조할 절 key — 정답 절 **한 개만** (spec §4-1 5번).
+ * evidence가 구간(예: 마 28:11-15)이면 그 구간 전체를 칠하게 되어 힌트가 되지 않으므로 첫 절만 남긴다.
+ */
+export function highlightKeys(view: { highlight: string | null }): string[] {
+  if (!view.highlight) return []
+  return expandRef(view.highlight, byAbbr).map(verseKeyString).slice(0, 1)
 }
 
 export function toggleMark(marked: string[], key: string): string[] {

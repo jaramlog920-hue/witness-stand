@@ -133,6 +133,7 @@ a { color: inherit; }
 }
 .seal .v { font-size: 24px; letter-spacing: 0.06em; white-space: nowrap; }
 .seal.absent .v { font-size: 19px; letter-spacing: 0.02em; }
+.seal .v.dual { font-size: 18px; letter-spacing: 0.02em; }
 .seal .who { font-size: 11px; opacity: 0.85; margin-top: 2px; font-weight: 400; }
 .seal.fact { color: var(--seal-fact); }
 .seal.twisted { color: var(--seal-twisted); }
