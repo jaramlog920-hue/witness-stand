@@ -15,7 +15,12 @@ export function Archive() {
   const nav = useNavigate()
   const solved = useProgress((s) => s.solved)
   const witnessSolved = useProgress((s) => s.witnessSolved)
+  const name = useProgress((s) => s.investigator.name)
+  const setInvestigator = useProgress((s) => s.setInvestigator)
+  const resetAll = useProgress((s) => s.reset)
   const [f, setF] = useState<Filter>({ verdict: 'all', book: 'all' })
+  const [draft, setDraft] = useState<string | null>(null)
+  const [confirming, setConfirming] = useState(false)
 
   const solvedRumors = useMemo(() => rumors.filter((c) => solved[c.id]), [solved])
   const solvedWitness = useMemo(() => testimonies.filter((c) => witnessSolved[c.id]), [witnessSolved])
@@ -92,6 +97,51 @@ export function Archive() {
           </section>
         )
       })}
+
+      {/* 조사관 기록 — 이름 바꾸기와 초기화. 게시판(플레이 동선)에는 두지 않는다 */}
+      <section className="drawer settings">
+        <h2>조사관 기록</h2>
+        <div className="setting-row">
+          <span className="small muted">조사관 이름</span>
+          {draft === null ? (
+            <span className="setting-value">
+              <strong>{name}</strong>
+              <button className="btn" onClick={() => setDraft(name)}>이름 바꾸기</button>
+            </span>
+          ) : (
+            <span className="setting-value">
+              <input
+                className="name-input"
+                value={draft}
+                maxLength={12}
+                aria-label="조사관 이름"
+                autoFocus
+                onChange={(e) => setDraft(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') { setInvestigator(draft); setDraft(null) }
+                  if (e.key === 'Escape') setDraft(null)
+                }}
+              />
+              <button className="btn primary" onClick={() => { setInvestigator(draft); setDraft(null) }}>바꾸기</button>
+              <button className="btn" onClick={() => setDraft(null)}>취소</button>
+            </span>
+          )}
+        </div>
+        <p className="small muted" style={{ margin: '0 0 12px' }}>해결한 사건 {total}건 · 금테 {goldCount}건</p>
+        {confirming ? (
+          <div className="danger-box">
+            <p className="small" style={{ margin: '0 0 10px' }}>
+              조사관 {name}의 기록 {total}건이 모두 지워집니다. 되돌릴 수 없습니다.
+            </p>
+            <div className="result-actions" style={{ marginTop: 0 }}>
+              <button className="btn" onClick={() => setConfirming(false)}>취소</button>
+              <button className="btn danger" onClick={() => { resetAll(); nav('/', { replace: true }) }}>지우기</button>
+            </div>
+          </div>
+        ) : (
+          <button className="btn danger-outline" onClick={() => setConfirming(true)}>기록 초기화</button>
+        )}
+      </section>
     </main>
   )
 }

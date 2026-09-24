@@ -193,3 +193,15 @@ a { color: inherit; }
 .modal.sheet { max-height: 85vh; display: flex; flex-direction: column; }
 .sheet-body { overflow-y: auto; }
 .sheet-body .verse { cursor: default; }
+
+/* 보관소 하단 — 조사관 기록 (이름 바꾸기·초기화) */
+.settings { border-top: 1px solid var(--line); margin-top: 28px; padding-top: 18px; }
+.setting-row { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-bottom: 10px; }
+.setting-value { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.name-input {
+  background: var(--bg-2); color: var(--paper); border: 1px solid var(--line);
+  border-radius: 6px; padding: 8px 10px; font: inherit; min-width: 140px;
+}
+.btn.danger-outline { color: var(--seal-false); border-color: var(--seal-false); }
+.btn.danger { background: var(--seal-false); border-color: var(--seal-false); color: #fff; font-weight: 600; }
+.danger-box { border: 1px solid var(--seal-false); border-radius: 6px; padding: 14px; }
