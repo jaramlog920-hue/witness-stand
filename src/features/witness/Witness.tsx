@@ -67,7 +67,21 @@ export function Witness() {
           const ids = placement[q.id] ?? []
           const fb = feedback?.find((r) => r.id === q.id)
           return (
-            <div key={q.id} className={`slot ${selected ? 'target' : ''} ${fb?.complete ? 'done' : ''}`} onClick={() => tapSlot(q.id)} role="button" tabIndex={0}>
+            <div
+              key={q.id}
+              className={`slot ${selected ? 'target' : ''} ${fb?.complete ? 'done' : ''}`}
+              onClick={() => tapSlot(q.id)}
+              // role="button" 만 주고 키 입력을 받지 않으면 키보드로는 카드를 붙일 수 없다
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault()
+                  tapSlot(q.id)
+                }
+              }}
+              role="button"
+              tabIndex={0}
+              aria-label={`${q.prompt} — 증언 ${q.answerCards.length}장`}
+            >
               <div className="prompt">{q.prompt} <span className="muted small">({q.answerCards.length}장)</span></div>
               <div className="placed">
                 {ids.map((cid) => {

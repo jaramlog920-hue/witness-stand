@@ -58,7 +58,8 @@ export function Complete() {
           {hardest.map((c) => (
             <div key={c.id} className="evidence-block">
               <h3>“{c.rumor}”</h3>
-              {(c.verdict === 'absent' ? c.hintOrder.slice(0, 1) : c.evidence).map(passageFor).map((p) => (
+              {/* 'absent' 는 정답 절이 없다 — 결과 화면과 같이 조사 범위 전체를 보여준다 */}
+              {(c.verdict === 'absent' ? c.scope : c.evidence).map(passageFor).map((p) => (
                 <div key={p.ref} style={{ marginBottom: 10 }}>
                   <div className="small" style={{ color: '#8a7a60' }}>{p.label}</div>
                   {p.verses.map((v) => <div key={v.key} className="v"><span className="n">{v.verse}</span><span>{v.text}</span></div>)}
