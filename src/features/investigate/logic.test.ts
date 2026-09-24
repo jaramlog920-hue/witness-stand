@@ -1,4 +1,6 @@
 import { grade, visibleScope, toggleMark, highlightKeys, MAX_EVIDENCE } from './logic'
+import { rumors, evidenceKeys, byAbbr } from '../../content/cases'
+import { expandRef, verseKeyString } from '../../content/ref'
 import type { RumorCase } from '../../content/types'
 
 const base: RumorCase = {
@@ -42,15 +44,45 @@ describe('visibleScope', () => {
   it('0단계는 전체 범위', () => {
     expect(visibleScope(base, 0)).toEqual({ refs: base.scope, highlight: null })
   })
-  it('1단계는 hintOrder 첫 구간만', () => {
-    expect(visibleScope(base, 1)).toEqual({ refs: ['마 28:11-15'], highlight: null })
+  it('1단계는 근거 절이 없는 구간만 접는다', () => {
+    // 근거가 마 28장에만 있으므로 마 27:62-66 이 접힌다
+    expect(visibleScope(base, 1)).toEqual({ refs: ['마 28:1-15'], highlight: null })
   })
-  it('2단계부터 보이는 구간 안의 정답 절 하나 강조', () => {
-    expect(visibleScope(base, 2)).toEqual({ refs: ['마 28:11-15'], highlight: '마 28:13' })
+  it('접을 구간이 없으면 hintOrder 첫 구간으로 좁힌다', () => {
+    const c: RumorCase = { ...base, scope: ['마 28:1-15'], evidence: ['마 28:13'], hintOrder: ['마 28:11-15'] }
+    expect(visibleScope(c, 1)).toEqual({ refs: ['마 28:11-15'], highlight: null })
   })
-  it('보이는 구간에 정답이 없으면 정답 구간을 함께 연다', () => {
-    const c: RumorCase = { ...base, hintOrder: ['마 27:62-66'] }
-    expect(visibleScope(c, 2)).toEqual({ refs: ['마 27:62-66', '마 28:5-6'], highlight: '마 28:5-6' })
+  it('hintOrder 첫 구간에 근거가 없으면 그 구간으로 좁히지 않는다', () => {
+    const c: RumorCase = { ...base, scope: ['마 28:1-15'], evidence: ['마 28:13'], hintOrder: ['마 28:1-8'] }
+    expect(visibleScope(c, 1).refs).toEqual(['마 28:1-15'])
+  })
+  it("'본문에 없음' 사건은 좁히지 않는다 — 좁히면 없다는 것을 확인할 수 없다", () => {
+    const absent: RumorCase = { ...base, verdict: 'absent', evidence: [] }
+    expect(visibleScope(absent, 1)).toEqual({ refs: absent.scope, highlight: null })
+    expect(visibleScope(absent, 3)).toEqual({ refs: absent.scope, highlight: null })
+  })
+  it('2단계부터 보이는 범위 안의 정답 절 하나 강조', () => {
+    expect(visibleScope(base, 2)).toEqual({ refs: ['마 28:1-15'], highlight: '마 28:5-6' })
+  })
+})
+
+describe('힌트로 좁힌 범위 — 전체 콘텐츠', () => {
+  const keysOf = (refs: string[]) => new Set(refs.flatMap((r) => expandRef(r, byAbbr).map(verseKeyString)))
+  it('어느 단계에서도 표시할 정답 절이 화면에 남아 있다', () => {
+    for (const c of rumors) {
+      if (c.verdict === 'absent') continue
+      const ev = evidenceKeys(c)
+      for (const level of [0, 1, 2, 3]) {
+        const visible = keysOf(visibleScope(c, level).refs)
+        const pickable = [...ev].filter((k) => visible.has(k))
+        expect(pickable.length, `${c.id} 힌트 ${level}단계에 고를 수 있는 근거 절이 없다`).toBeGreaterThan(0)
+      }
+    }
+  })
+  it("'본문에 없음' 사건은 어느 단계에서도 조사 범위가 줄지 않는다", () => {
+    for (const c of rumors.filter((r) => r.verdict === 'absent')) {
+      for (const level of [1, 2, 3]) expect(visibleScope(c, level).refs, c.id).toEqual(c.scope)
+    }
   })
 })
 

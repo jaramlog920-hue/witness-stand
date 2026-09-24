@@ -35,14 +35,31 @@ export function grade(c: RumorCase, attempt: Attempt, prevWrongVerdicts: number)
   return attempt.marked.some((k) => keys.has(k)) ? { kind: 'solved' } : { kind: 'wrong-evidence' }
 }
 
+/** 이 구간 안에 정답 절이 한 절이라도 들어 있는가 */
+function hasEvidence(c: RumorCase, ref: string): boolean {
+  const ev = evidenceKeys(c)
+  return expandRef(ref, byAbbr).map(verseKeyString).some((k) => ev.has(k))
+}
+
 /**
  * 힌트 단계에 따라 보여줄 조사 범위.
- * 0: 전체 scope / 1: hintOrder[0] 구간만 / 2+: 같은 구간 + 정답 절 1개 강조
+ * 0: 전체 scope / 1: 근거가 없는 구간을 접는다 / 2+: 같은 범위 + 정답 절 1개 강조
+ *
+ * 좁힌 범위에는 **반드시 정답 절이 보여야 한다**. 그래서
+ *  - 'absent'(근거 절이 없는 판정)는 좁히지 않는다. 좁히면 "본문에 없다"를 확인할 길이 사라진다
+ *  - 근거가 여러 구간에 나뉘어 있으면 그 구간을 모두 남기고, 근거가 없는 구간만 접는다
+ *  - 접을 것이 없을 때만 hintOrder[0] 으로 좁힌다 (그 구간에 근거가 있을 때만)
  */
 export function visibleScope(c: RumorCase, hintLevel: number): { refs: string[]; highlight: string | null } {
-  if (hintLevel <= 0 || c.hintOrder.length === 0) return { refs: c.scope, highlight: null }
-  const refs = [c.hintOrder[0]]
-  if (hintLevel < 2 || c.evidence.length === 0) return { refs, highlight: null }
+  if (hintLevel <= 0 || c.verdict === 'absent' || c.evidence.length === 0) {
+    return { refs: c.scope, highlight: null }
+  }
+  const withEvidence = c.scope.filter((s) => hasEvidence(c, s))
+  let refs = c.scope
+  if (withEvidence.length > 0 && withEvidence.length < c.scope.length) refs = withEvidence
+  else if (c.hintOrder[0] && hasEvidence(c, c.hintOrder[0])) refs = [c.hintOrder[0]]
+
+  if (hintLevel < 2) return { refs, highlight: null }
   // 강조할 정답 절은 보이는 구간 안에 있어야 한다. 없으면 그 구간을 함께 연다
   const inside = c.evidence.find((e) => refWithin(e, refs, byAbbr))
   if (inside) return { refs, highlight: inside }

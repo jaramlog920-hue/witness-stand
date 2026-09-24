@@ -79,7 +79,13 @@ export function Investigate() {
         <div className="q">“{c.rumor}” <span className="muted small">— {c.source}</span></div>
         {outcome?.kind === 'wrong-verdict' && (
           <div className="hint">
-            판정이 본문과 맞지 않습니다. {wrongVerdicts >= 2 ? '표시된 절을 다시 읽어 보십시오.' : '조사 범위를 좁혔습니다. 다시 읽어 보십시오.'}
+            판정이 본문과 맞지 않습니다.{' '}
+            {/* 안내는 화면이 실제로 달라진 만큼만 말한다 — 'absent' 사건은 범위를 좁히지 않는다 */}
+            {view.highlight
+              ? '표시된 절을 다시 읽어 보십시오.'
+              : view.refs.length < c.scope.length
+                ? '조사 범위를 좁혔습니다. 다시 읽어 보십시오.'
+                : '본문을 처음부터 다시 읽어 보십시오.'}
           </div>
         )}
         {outcome?.kind === 'wrong-evidence' && (
