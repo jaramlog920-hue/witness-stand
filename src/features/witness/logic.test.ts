@@ -1,4 +1,5 @@
-import { check, place, removeWrong, placedCard } from './logic'
+import { check, place, removeWrong, placedCard, type Placement } from './logic'
+import { testimonies } from '../../content/cases'
 import type { TestimonyCase } from '../../content/types'
 
 const c: TestimonyCase = {
@@ -47,5 +48,34 @@ describe('check', () => {
     const p = { q1: ['a', 'c'], q2: ['b'] }
     const r = check(c, p)
     expect(removeWrong(p, r.results)).toEqual({ q1: ['a'], q2: [] })
+  })
+})
+
+describe('증언 사건 전체 — 정답대로 풀리는가', () => {
+  it('18건 모두 정답 카드를 붙이면 제출 버튼이 열리고 전 질문이 완성된다', () => {
+    for (const c of testimonies) {
+      let p: Placement = {}
+      for (const q of c.questions) {
+        expect(q.answerCards.length, `${c.id} ${q.id} 정답 카드 없음`).toBeGreaterThan(0)
+        for (const cid of q.answerCards) {
+          expect(c.cards.some((x) => x.id === cid), `${c.id} ${q.id}: 없는 카드 ${cid}`).toBe(true)
+          p = place(p, q.id, cid)
+        }
+      }
+      // Witness 화면의 제출 버튼 조건과 같은 식
+      const allPlaced = c.questions.every((q) => (p[q.id]?.length ?? 0) >= q.answerCards.length)
+      expect(allPlaced, `${c.id}: 정답을 다 붙여도 제출 버튼이 열리지 않는다`).toBe(true)
+      expect(check(c, p).allDone, `${c.id}: 정답대로 붙였는데 완성되지 않는다`).toBe(true)
+    }
+  })
+  it('한 카드가 두 질문의 정답이면 풀 수 없다 — 그런 사건이 없어야 한다', () => {
+    for (const c of testimonies) {
+      const seen = new Map<string, string>()
+      for (const q of c.questions)
+        for (const cid of q.answerCards) {
+          expect(seen.has(cid), `${c.id}: 카드 ${cid} 가 ${seen.get(cid)} 와 ${q.id} 양쪽의 정답`).toBe(false)
+          seen.set(cid, q.id)
+        }
+    }
   })
 })
