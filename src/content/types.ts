@@ -46,6 +46,8 @@ export interface RumorCase {
   evidence: Ref[]
   /** 틀렸을 때 남길 구간 순서. scope의 부분집합 */
   hintOrder: Ref[]
+  /** 해설이 인용했지만 evidence 에는 없는 절 — 결과 화면에서 함께 보여준다 */
+  alsoShow?: Ref[]
   explanation: string
   /** 성경이 직접 기록한 소문 (exclusion-list §2-1) */
   recordedInText: boolean

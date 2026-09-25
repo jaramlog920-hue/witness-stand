@@ -114,6 +114,7 @@ interface RumorCase {
   alsoAccept?: Verdict[]          // 중복 답변으로 인정할 판정. absent 와는 섞을 수 없다
   evidence: Ref[]                 // 정답 절 집합. absent면 []
   hintOrder: Ref[]                // 틀렸을 때 남길 구간 순서 (scope의 부분집합)
+  alsoShow?: Ref[]                // 해설이 인용했지만 evidence 에는 없는 절. 결과 화면에서 함께 보여준다
   explanation: string             // 2~3문장. 따옴표 인용은 verify 대상
   recordedInText: boolean         // §2-1 표시 (성경이 직접 기록한 소문)
   flags?: ('review')[]            // ⚠ 검수 필요
@@ -159,6 +160,7 @@ interface TestimonyCase {
 
 1. **참조 무결성**: 모든 `Ref`가 실재하는 책·장·절인가.
 2. **인용 일치**: `Testimony.quote`는 `ref` 본문과 **공백 제거 후 완전 일치** (부분 인용 허용 안 함 — 증언 카드는 문장 단위 그대로). `rumor`·`explanation`·`record` 속 따옴표 문구는 참조 절 본문에 **포함**되어야 함.
+   - 추가: `explanation` 의 인용은 **결과 화면에 실제로 보이는 본문**(`evidence` + `alsoShow`, `absent` 는 `scope`) 안에서도 찾을 수 있어야 한다. 아니면 플레이어가 해설의 인용을 화면 어디서도 확인할 수 없다.
 3. **evidence ⊂ scope**: 정답 절이 조사 범위 밖이면 오류.
 4. **hintOrder ⊂ scope**, `absent`면 `evidence` 비어 있어야 함, 그 외엔 1개 이상.
 5. **answerCards** 가 모두 `cards`에 존재, 카드마다 최소 한 질문에 쓰이거나 `distractor: true` 명시.

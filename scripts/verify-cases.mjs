@@ -120,6 +120,15 @@ for (const c of rumors) {
     const quoteRefs = [...c.scope, ...(c.sourceRef ? [c.sourceRef] : [])]
     checkQuotes(w, c.rumor, quoteRefs)
     checkQuotes(w, c.explanation, quoteRefs)
+
+    // 결과 화면에 실제로 보이는 본문 안에서 해설의 인용을 찾을 수 있어야 한다.
+    // 아니면 플레이어는 해설이 인용한 말을 화면 어디서도 확인할 수 없다.
+    for (const r of c.alsoShow ?? []) {
+      if (!checkRef(w, r)) continue
+      if (!refWithin(r, c.scope, byAbbr)) fail(w, `alsoShow ${r} 가 scope 밖`)
+    }
+    const shownRefs = c.verdict === 'absent' ? c.scope : [...c.evidence, ...(c.alsoShow ?? [])]
+    if (shownRefs.length) checkQuotes(`${w} (결과 화면)`, c.explanation, shownRefs)
   }
   if (typeof c.recordedInText !== 'boolean') fail(w, 'recordedInText 필요')
 }

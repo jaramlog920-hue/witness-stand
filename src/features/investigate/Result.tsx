@@ -14,6 +14,8 @@ export function Result() {
   const gold = isGold(rec)
   // 근거 구절 전문이 결과의 중심이다 (spec §4-1 6번). absent는 조사 범위 전체가 근거.
   const passages = (c.verdict === 'absent' ? c.scope : c.evidence).map(passageFor)
+  // 해설이 인용한 문구의 출처가 근거 구절 밖에 있으면 그 절도 보여준다 (안 그러면 어디 있는 말인지 찾을 수 없다)
+  const alsoShow = (c.verdict === 'absent' ? [] : (c.alsoShow ?? [])).map(passageFor)
   // 중복 답변 사건은 인장에 두 판정을 함께 찍는다 (어느 쪽으로 답해도 정답이므로)
   const labels = acceptedVerdicts(c).map((v) => VERDICT_LABEL[v])
   const sealLabel = labels.join('·')
@@ -45,6 +47,20 @@ export function Result() {
           </div>
         ))}
       </section>
+
+      {alsoShow.length > 0 && (
+        <section className="evidence-block">
+          <h3>해설이 가리키는 본문</h3>
+          {alsoShow.map((p) => (
+            <div key={p.ref} style={{ marginBottom: 12 }}>
+              <div className="small" style={{ color: '#8a7a60', marginBottom: 4 }}>{p.label}</div>
+              {p.verses.map((v) => (
+                <div key={v.key} className="v"><span className="n">{v.verse}</span><span>{v.text}</span></div>
+              ))}
+            </div>
+          ))}
+        </section>
+      )}
 
       <p className="explain">{c.explanation}</p>
       {c.alsoAccept?.length ? (
