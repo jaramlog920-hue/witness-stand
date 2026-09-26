@@ -8,7 +8,7 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['assets/*', 'apple-touch-icon.png', 'favicon.ico'],
+      includeAssets: ['assets/*', 'apple-touch-icon.png', 'favicon.ico', 'favicon-16.png', 'favicon-32.png', 'favicon-48.png'],
       manifest: {
         name: '증언대: 신약 재판소',
         short_name: '증언대',
@@ -20,7 +20,8 @@ export default defineConfig({
         theme_color: '#14110d',
         icons: [
           { src: 'icon-192.png', sizes: '192x192', type: 'image/png' },
-          { src: 'icon-512.png', sizes: '512x512', type: 'image/png', purpose: 'any maskable' },
+          { src: 'icon-512.png', sizes: '512x512', type: 'image/png' },
+          { src: 'icon-512.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' },
         ],
       },
       workbox: {
